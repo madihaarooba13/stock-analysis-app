@@ -1,76 +1,68 @@
-// "use client";
-// import { useState } from "react";   
-// export default function SearchBar() {
-//    const[query, setQuery] = useState("");
-//    const[data, setData] = useState(null);
-//    const handleSearch = async () => {
-//     const res = await fetch(`http://localhost:5000/api/stocks/${query}`);
-//     const result = await res.json();
-//     setData(result);
-//    };
-//    return(
-//     <div className="mt-5">
-//       <input
-//         type="text"
-//         placeholder="Search stock (e.g. TCS)"
-//         value={query}
-//         onChange={(e) => setQuery(e.target.value)}
-//         className="border p-2 mr-2"
-//       />
-//        <button
-//         onClick={handleSearch}
-//         className="bg-blue-500 text-white px-4 py-2"
-//       >
-//         Search
-//       </button>
-//        {data && data["Global Quote"] && data["Global Quote"]["05. price"] ? (
-//   <div className="mt-4">
-//     <p>Price: {data["Global Quote"]["05. price"]}</p>
-//   </div>
-// ) : (
-//   <p className="mt-4 text-red-500">No data found / API limit hit</p>
-// )}
-//     </div>
-//    )
-// }
 "use client";
+
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [price, setPrice] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
+    if (!query) return;
+
+    setLoading(true);
+
     try {
       const res = await fetch(`http://localhost:5000/api/stocks/${query}`);
       const data = await res.json();
 
-      console.log(data);
-
-      setPrice(data.price); // 👈 backend se jo aa raha
+      setPrice(data.price);
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="mt-5">
-      <input
-        type="text"
-        placeholder="Search stock (e.g. AAPL)"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="border p-2 mr-2"
-      />
+    <div className="flex flex-col items-center">
 
-      <button
-        onClick={handleSearch}
-        className="bg-blue-500 text-white px-4 py-2"
+      {/* Input */}
+      <motion.div
+        whileFocus={{ scale: 1.05 }}
+        className="flex bg-white/10 backdrop-blur-md rounded-full p-2 shadow-lg"
       >
-        Search
-      </button>
+        <input
+          type="text"
+          placeholder="Search stock (AAPL)"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="bg-transparent outline-none px-4 py-2 text-white"
+        />
 
-      <p className="mt-3">Price: {price}</p>
+        <button
+          onClick={handleSearch}
+          className="bg-green-500 px-5 py-2 rounded-full hover:bg-green-600 transition"
+        >
+          Search
+        </button>
+      </motion.div>
+
+      {/* Loader */}
+      {loading && <p className="mt-4 text-gray-300">Loading...</p>}
+
+      {/* Result */}
+      {price && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-6 bg-white/10 backdrop-blur-md p-6 rounded-xl shadow-lg"
+        >
+          <h2 className="text-xl font-bold">{query.toUpperCase()}</h2>
+          <p className="text-green-400 text-lg mt-2">Price: {price}</p>
+        </motion.div>
+      )}
     </div>
   );
 }
