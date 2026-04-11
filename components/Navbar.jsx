@@ -148,6 +148,7 @@
 import { useState, useEffect } from "react";
 import { Search, Bell, User, Menu, X } from "lucide-react";
 
+
 export default function Navbar({ onSearch }) {
   const [query, setQuery] = useState("");
   const [dark, setDark] = useState(true);
@@ -162,14 +163,17 @@ export default function Navbar({ onSearch }) {
     document.documentElement.classList.toggle("dark");
   };
 
-  const handleSearch = () => {
-    if (query.trim()) onSearch(query);
-  };
+  // const handleSearch = () => {
+  //   if (query.trim()) onSearch(query);
+  // };
 
+  const handleSearch = () => {
+  if (query.trim()) onSearch(query.toUpperCase());
+};
   return (
-    <nav className="px-4 sm:px-6 py-4 
-    bg-white/80 dark:bg-[#020617]/80 backdrop-blur-md 
-    border-b border-gray-200 dark:border-gray-800 shadow-sm relative">
+    <nav className="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 py-4
+bg-white/70 dark:bg-[#020617]/70 backdrop-blur-lg 
+border-b border-gray-200 dark:border-gray-800">
 
       {/* 🔥 MOBILE LOGO */}
       <div className="lg:hidden flex justify-center mb-3">

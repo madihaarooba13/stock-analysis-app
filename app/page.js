@@ -1,89 +1,323 @@
+// "use client";
+
+// import { useState } from "react";
+// import Navbar from "../components/Navbar";
+// import Image from "next/image";
+// import { useEffect } from "react";
+
+// export default function Home() {
+//   const [price, setPrice] = useState(null);
+//   const [loading, setLoading] = useState(false);
+//   const [symbol, setSymbol] = useState("");
+//   const [stocks, setStocks] = useState([]);
+
+ 
+//   const fetchStock = async (symbol) => {
+//   try {
+//     setLoading(true);
+//     setSymbol(symbol);
+
+//     const res = await fetch(`http://localhost:5000/api/stocks/${symbol}`);
+//     const data = await res.json();
+
+//     if (!data.price) {
+//       setPrice("Invalid ❌");
+//     } else {
+//       setPrice(data.price);
+//     }
+
+//   } catch (err) {
+//     console.error(err);
+//     setPrice("Error ❌");
+//   }
+
+//   setLoading(false);
+// };
+// const fetchMultipleStocks = async () => {
+//   try {
+//     const res = await fetch("http://localhost:5000/api/stocks/multi/demo");
+//     const data = await res.json();
+//     setStocks(data);
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+// useEffect(() => {
+//   fetchMultipleStocks();
+// }, []);
+
+//   return (
+//     <div className="w-full overflow-x-hidden bg-gray-50 dark:bg-[#020617] text-gray-900 dark:text-white transition-colors duration-300">
+
+//       {/* Navbar */}
+//       <Navbar onSearch={fetchStock} />
+
+//       {/* Hero Section */}
+//       <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+
+//         {/* Image */}
+//         <Image
+//           src="/stock.jpg"
+//           alt="stock"
+//           fill
+//           priority
+//           sizes="100vw"
+//           className="object-cover"
+//         />
+
+//         {/* Overlay (adaptive) */}
+//         <div className="absolute inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-[2px]" />
+
+//         {/* Content */}
+//         <div className="relative z-10 text-center flex flex-col items-center px-4 -mt-10">
+
+//           <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 text-white">
+//             Analyze Stocks <br /> Smarter 📈
+//           </h1>
+
+//           <p className=" text-white mb-6 text-sm sm:text-base md:text-lg opacity-90">
+//             Real-time insights. Better decisions.
+//           </p>
+
+//           <button className="bg-blue-500 text-white px-6 py-3 rounded-lg transition-all duration-300 cursor-pointer hover:bg-blue-600 hover:scale-105 active:scale-95">
+//             Start Exploring 🚀
+//           </button>
+//           {loading && (
+//   <p className="text-blue-400 mt-4">Loading...</p>
+// )}
+
+// {price && (
+//   <div className="mt-6 bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl px-6 py-4 shadow-[0_0_20px_rgba(59,130,246,0.6)]">
+    
+//     <h2 className="text-xl font-semibold">
+//       {symbol}
+//     </h2>
+
+//     <p className="text-2xl text-green-400 mt-2">
+//       {price === "Invalid ❌" || price === "Error ❌"
+//         ? price
+//         : `₹ ${price}`}
+//     </p>
+
+//   </div>
+// )}
+
+//         </div>
+
+//       </section>
+
+//       <section className="py-16 px-6">
+//   <h2 className="text-2xl font-bold mb-6 text-center">
+//     Trending Stocks 📊
+//   </h2>
+
+//   <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+//     {stocks.map((stock, i) => (
+//       <div
+//         key={i}
+//         className="bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-xl shadow-[0_0_20px_rgba(59,130,246,0.6)] hover:scale-105 transition"
+//       >
+//         <h3 className="text-lg font-semibold">{stock.symbol}</h3>
+//         <p className="text-2xl text-green-400 mt-2">
+//           ₹ {stock.price}
+//         </p>
+//       </div>
+//     ))}
+//   </div>
+// </section>
+
+
+//      </div>
+//   );
+// }
+
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Image from "next/image";
-
+import StockChart from "../components/StockChart";
+import { motion } from "framer-motion";
 export default function Home() {
   const [price, setPrice] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [symbol, setSymbol] = useState("");
+  const [stocks, setStocks] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const [chartLoading, setChartLoading] = useState(false);
 
-  const fetchStock = async (symbol) => {
+  // 🔥 SINGLE STOCK SEARCH
+const fetchStock = async (symbol) => {
+  try {
+    setLoading(true);
+    setSymbol(symbol);
+    setChartData([]);
+
+    const res = await fetch(`http://localhost:5000/api/stocks/${symbol}`);
+    const data = await res.json();
+
+    if (!data.price) {
+      setPrice("Invalid ❌");
+    } else {
+      setPrice(data.price);
+    }
+
+    await fetchChart(symbol); // 👈 WAIT karo
+
+  } catch (err) {
+    console.error(err);
+    setPrice("Error ❌");
+  }
+
+  setLoading(false);
+};
+
+  // 🔥 MULTIPLE STOCKS
+  const fetchMultipleStocks = async () => {
     try {
-      setLoading(true);
-
-      const res = await fetch(`http://localhost:5000/api/stocks/${symbol}`);
+      const res = await fetch("http://localhost:5000/api/stocks/multi/demo");
       const data = await res.json();
-
-      setPrice(data.price || "Not Found");
-      setLoading(false);
+      setStocks(data);
     } catch (err) {
       console.error(err);
-      setPrice("Error");
-      setLoading(false);
     }
   };
 
+  const fetchChart = async (symbol) => {
+  try {
+    setChartLoading(true);
+
+    const res = await fetch(
+      `http://localhost:5000/api/stocks/chart/${symbol}`
+    );
+    const data = await res.json();
+
+    setChartData(data);
+  } catch (err) {
+    console.error(err);
+  }
+
+  setChartLoading(false);
+};
+
+  useEffect(() => {
+    fetchMultipleStocks();
+  }, []);
+
   return (
-    <div className="w-full overflow-x-hidden bg-gray-50 dark:bg-[#020617] text-gray-900 dark:text-white transition-colors duration-300">
+    <div className="w-full min-h-screen bg-[#020617] text-white">
 
       {/* Navbar */}
       <Navbar onSearch={fetchStock} />
 
-      {/* Hero Section */}
-      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
-
-        {/* Image */}
+      {/* HERO */}
+      <motion.div
+  initial={{ opacity: 0, y: 40 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6 }}
+></motion.div>
+      <section className="relative w-full h-screen flex items-center justify-center">
         <Image
           src="/stock.jpg"
           alt="stock"
           fill
-          priority
-          sizes="100vw"
           className="object-cover"
         />
 
-        {/* Overlay (adaptive) */}
-        <div className="absolute inset-0 bg-black/40 dark:bg-black/60" />
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
 
-        {/* Content */}
-        <div className="relative z-10 text-center flex flex-col items-center px-4 -mt-10">
+        <div className="relative z-10 text-center flex flex-col items-center 
+bg-white/10 backdrop-blur-xl border border-white/10 
+px-8 py-10 rounded-2xl shadow-2xl">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
+  Analyze Stocks{" "}
+  <span className="bg-gradient-to-r from-blue-400 to-cyan-400 text-transparent bg-clip-text">
+    Smarter
+  </span>{" "}
+  📈
+</h1>
 
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 text-white">
-            Analyze Stocks <br /> Smarter 📈
-          </h1>
-
-          <p className=" text-white mb-6 text-sm sm:text-base md:text-lg opacity-90">
+          <p className="text-gray-300 mb-8 max-w-xl text-center">
             Real-time insights. Better decisions.
           </p>
 
-          <button className="bg-blue-500 text-white px-6 py-3 rounded-lg transition-all duration-300 cursor-pointer hover:bg-blue-600 hover:scale-105 active:scale-95">
+          <button className="bg-gradient-to-r from-blue-500 to-cyan-500 
+px-8 py-3 rounded-xl 
+hover:scale-105 active:scale-95 
+transition duration-200 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
             Start Exploring 🚀
           </button>
+          <div className="flex flex-wrap justify-center gap-4 mt-6 text-sm text-gray-300">
+  <span>⚡ Real-time data</span>
+  <span>📊 Smart insights</span>
+  <span>🔒 Secure & fast</span>
+</div>
 
+          {loading && <p className="mt-4">Loading...</p>}
+
+          {price && (
+            <div className="mt-6 bg-white/10 backdrop-blur-lg p-6 rounded-xl">
+              <h2 className="text-xl font-semibold">{symbol}</h2>
+              <p className="text-2xl text-green-400 mt-2">
+                {price === "Invalid ❌" || price === "Error ❌"
+                  ? price
+                  : `₹ ${price}`}
+              </p>
+            </div>
+          )}
         </div>
-
       </section>
 
-      {/* Result Section */}
-      <section className="w-full flex flex-col items-center justify-center mt-20 px-4">
+      {/* 🔥 TRENDING STOCKS */}
+      <section className="py-16 px-6">
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Trending Stocks 📊
+        </h2>
 
-        <h1 className="text-3xl font-bold mb-6">
-          Welcome to MarketMind 🚀
-        </h1>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {stocks.map((stock, i) => (
+           
+            <div
+  key={i}
+  onClick={() => fetchStock(stock.symbol)}
+  className="cursor-pointer bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-xl hover:scale-105 hover:shadow-2xl transition"
+>
+              <h3 className="text-lg font-semibold">{stock.symbol}</h3>
 
-        {loading && <p className="text-blue-500 dark:text-blue-400">Loading...</p>}
+              <p className="text-2xl mt-2">
+                ₹ {stock.price}
+              </p>
 
-        {price && (
-          <div className="bg-gray-100 dark:bg-gray-800 shadow-lg rounded-lg p-6 mt-4">
-            <h2 className="text-xl font-semibold">Stock Price</h2>
-            <p className="text-2xl text-green-600 dark:text-green-400 mt-2">
-              ₹ {price}
-            </p>
-          </div>
-        )}
-
+              <p
+                className={`mt-1 ${
+                  parseFloat(stock.change) >= 0
+                    ? "text-green-400"
+                    : "text-red-400"
+                }`}
+              >
+                {stock.change}%
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
+     {/* 🔥 Chart Loading */}
+{chartLoading && (
+  <p className="text-center mt-6 text-gray-400 animate-pulse">
+  Loading chart 📈...
+</p>
+)}
+
+{/* 🔥 Chart */}
+{chartData.length > 0 && (
+  <div className="px-6">
+    <h2 className="text-xl mt-10 text-center">
+      {symbol} Chart 📈
+    </h2>
+    <StockChart data={chartData} />
+  </div>
+)}
 
     </div>
   );
