@@ -146,6 +146,8 @@ export default function Home() {
   const [stocks, setStocks] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [chartLoading, setChartLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // 🔥 SINGLE STOCK SEARCH
 const fetchStock = async (symbol) => {
@@ -164,6 +166,11 @@ const fetchStock = async (symbol) => {
     }
 
     await fetchChart(symbol); // 👈 WAIT karo
+       setSearched(true);
+       window.scrollTo({
+      top: window.innerHeight,
+      behavior: "smooth",
+    });
 
   } catch (err) {
     console.error(err);
@@ -204,7 +211,19 @@ const fetchStock = async (symbol) => {
   useEffect(() => {
     fetchMultipleStocks();
   }, []);
+useEffect(() => {
+  const handleScroll = () => {
+    if (window.scrollY > 100) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
+    }
+  };
 
+  window.addEventListener("scroll", handleScroll);
+
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
   return (
     <div className="w-full min-h-screen bg-[#020617] text-white">
 
@@ -217,8 +236,8 @@ const fetchStock = async (symbol) => {
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.6 }}
 ></motion.div>
-      <section className="relative w-full h-screen flex items-center justify-center">
-        <Image
+<section className={`relative w-full h-screen flex items-center justify-center transition-all duration-500 
+${scrolled ? "opacity-40 blur-sm scale-95" : "opacity-100 scale-100"}`}>        <Image
           src="/stock.jpg"
           alt="stock"
           fill
