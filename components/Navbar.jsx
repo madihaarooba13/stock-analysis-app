@@ -147,12 +147,13 @@
 
 import { useState, useEffect } from "react";
 import { Search, Bell, User, Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-
-export default function Navbar({ onSearch }) {
+export default function Navbar() {
   const [query, setQuery] = useState("");
   const [dark, setDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -168,7 +169,9 @@ export default function Navbar({ onSearch }) {
   // };
 
   const handleSearch = () => {
-  if (query.trim()) onSearch(query.toUpperCase());
+  if (query.trim()) {
+    router.push(`/stock/${query.toUpperCase()}`);
+  }
 };
   return (
     <nav className="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 py-4
