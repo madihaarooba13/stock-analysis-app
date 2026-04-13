@@ -138,7 +138,11 @@ import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { useRouter } from "next/navigation";
 import Sparkline from "../components/Sparkline";
-
+import MarketCard from "../components/MarketCard";
+import MarketGraph from "../components/MarketGraph";
+// import { useRouter } from "next/navigation";
+import MarketInfoCard from "../components/MarketInfoCard";
+import MarketGraphCard from "../components/MarketGraphCard";
 import Image from "next/image";
 import StockChart from "../components/StockChart";
 import { motion } from "framer-motion";
@@ -311,137 +315,53 @@ transition duration-200 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
       </section>
 
 
-    {/* 🔥 NIFTY / SENSEX PRO SECTION */}
-{/* <div className="px-6 -mt-24 relative z-20">
-  <div className="max-w-6xl mx-auto"> */}
-
-    {/* 🔥 NIFTY CARD */}
-    {/* {market[0] && (
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 
-      rounded-2xl p-6 shadow-[0_0_30px_rgba(59,130,246,0.1)]"> */}
-
-        {/* TOP */}
-        {/* <div className="flex items-center justify-between mb-4"> */}
-
-          {/* LEFT */}
-          {/* <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-lg font-bold">
-              50
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-400">NIFTY 50</p>
-              <p className="text-2xl font-semibold">
-                ₹ {market[0].price}
-              </p>
-            </div>
-          </div>
-
-          {/* RIGHT */}
-          {/* <p className={`text-lg font-medium ${
-            market[0].change >= 0 ? "text-green-400" : "text-red-400"
-          }`}>
-            {market[0].change >= 0 ? "+" : ""}
-            {market[0].change}%
-          </p>
-
-        </div> */} 
-
-
-      
-        {/* 🔥 BIG CHART */}
-{/* <div className={`h-40 ${
-  market[0].change >= 0 ? "text-green-400" : "text-red-400"
-}`}> */}
-  {/* <Sparkline
-    data={(market[0].chart || []).map(v =>
-      typeof v === "number" ? { value: v } : v
-    )}
-    large
-  />
-</div>
-
-      </div>
-    )}
-
-  </div> */}
-{/* </div> */}
-
-
 {/* 🔥 MARKET OVERVIEW */}
-<div className="max-w-6xl mx-auto px-4 mt-10">
+<div className="max-w-6xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
 
-  {/* <p className="text-white mb-2">TEST SPARKLINE</p> */}
-
-  <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-
-    <div className="flex justify-between items-center">
-
-      {/* LEFT */}
-      <div>
-        <p className="text-sm text-gray-400">NIFTY 50</p>
-        <p className="text-3xl font-bold">₹ 24,050</p>
-        <p className="text-green-400 text-sm mt-1">▲ 1.16%</p>
-      </div>
-
-      {/* RIGHT → THIS IS YOUR CHART */}
-      <div className="w-1/2 text-green-400">
-
-        <Sparkline
-          large
-          data={[
-            { value: 100 },
-            { value: 105 },
-            { value: 102 },
-            { value: 110 },
-            { value: 108 },
-            { value: 115 },
-            { value: 120 },
-          ]}
-        />
-
-      </div>
-
-    </div>
-
+  {/* NIFTY INFO */}
+  <div
+    className="cursor-pointer group 
+  transition duration-300 
+  hover:scale-[1.02] hover:-translate-y-1"
+    
+    onClick={() => router.push("/market/nifty")}
+  >
+    <MarketInfoCard title="NIFTY 50" data={market[0]} />
   </div>
+
+  {/* NIFTY GRAPH */}
+  <div
+    className="cursor-pointer group 
+  transition duration-300 
+  hover:scale-[1.02] hover:-translate-y-1"
+    onClick={() => router.push("/market/nifty")}
+  >
+    <MarketGraphCard data={market[0]} />
+  </div>
+
+  {/* SENSEX INFO */}
+  <div
+    className="cursor-pointer group 
+  transition duration-300 
+  hover:scale-[1.02] hover:-translate-y-1"
+    onClick={() => router.push("/market/sensex")}
+  >
+    <MarketInfoCard title="SENSEX" data={market[1]} />
+  </div>
+
+  {/* SENSEX GRAPH */}
+  <div
+    className="cursor-pointer group 
+  transition duration-300 
+  hover:scale-[1.02] hover:-translate-y-1"
+    onClick={() => router.push("/market/sensex")}
+  >
+    <MarketGraphCard data={market[1]} />
+  </div>
+
 </div>
-{/* 🔥 MARKET OVERVIEW */}
-<div className="max-w-6xl mx-auto px-4 mt-10">
-  {market[0] && (
-    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-      
-      <div className="flex justify-between items-center">
-        {/* LEFT */}
-        <div>
-          <p className="text-sm text-gray-400">NIFTY 50</p>
-          <p className="text-3xl font-bold">₹ {market[0].price}</p>
 
-          <p className={`text-sm mt-1 ${
-            market[0].change >= 0 ? "text-green-400" : "text-red-400"
-          }`}>
-            {market[0].change >= 0 ? "▲" : "▼"} {market[0].change}%
-          </p>
-        </div>
 
-        {/* RIGHT → BIG CHART */}
-        <div className={`w-1/2 ${
-          market[0].change >= 0 ? "text-green-400" : "text-red-400"
-        }`}>
-          <Sparkline
-            large
-            data={
-              market[0].chart?.length
-                ? market[0].chart
-                : [100,105,102,110,108,115,120]
-            }
-          />
-        </div>
-      </div>
-
-    </div>
-  )}
-</div>
 
 
       {/* 🔥 TRENDING STOCKS */}
