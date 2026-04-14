@@ -140,6 +140,7 @@ import { useRouter } from "next/navigation";
 import Sparkline from "../components/Sparkline";
 import MarketCard from "../components/MarketCard";
 import MarketGraph from "../components/MarketGraph";
+import Footer from "../components/Footer";
 // import { useRouter } from "next/navigation";
 import MarketInfoCard from "../components/MarketInfoCard";
 import MarketGraphCard from "../components/MarketGraphCard";
@@ -371,7 +372,7 @@ transition duration-200 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
         </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stocks.map((stock, i) => (
+          {stocks.slice(0, 8).map((stock, i) => (
            
             <div
   key={i}
@@ -426,6 +427,7 @@ hover:border-blue-400/40"
   </div>
 )} */}
 
+<Footer />
     </div>
   );
 }

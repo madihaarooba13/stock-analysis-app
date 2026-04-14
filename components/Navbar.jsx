@@ -148,6 +148,7 @@
 import { useState, useEffect } from "react";
 import { Search, Bell, User, Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Navbar() {
   const [query, setQuery] = useState("");
@@ -173,27 +174,54 @@ export default function Navbar() {
     router.push(`/stock/${query.toUpperCase()}`);
   }
 };
+const navLinks = [
+  { name: "Home", path: "/" },
+  { name: "Dashboard", path: "/dashboard" },
+  { name: "Watchlist", path: "/watchlist" },
+  { name: "Markets", path: "/markets" },
+];
+
+const handleHomeClick = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
   return (
     <nav className="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 py-4
 bg-white/70 dark:bg-[#020617]/70 backdrop-blur-lg 
 border-b border-gray-200 dark:border-gray-800">
 
       {/* 🔥 MOBILE LOGO */}
-      <div className="lg:hidden flex justify-center mb-3">
+      {/* <div className="lg:hidden flex justify-center mb-3">
         <h1 className="text-xl font-bold text-blue-600 cursor-pointer 
         hover:scale-110 hover:text-blue-500 transition duration-300">
           MarketMind
         </h1>
-      </div>
+      </div> */}
+      <div className="lg:hidden flex justify-center mb-3">
+  <Link href="/" onClick={handleHomeClick}>
+    <h1 className="text-xl font-bold text-blue-600 cursor-pointer 
+    hover:scale-110 hover:text-blue-500 transition duration-300">
+      MarketMind
+    </h1>
+  </Link>
+</div>
 
       {/* 🔥 MAIN ROW */}
       <div className="flex items-center justify-between gap-2">
 
         {/* DESKTOP LOGO */}
-        <h1 className="hidden lg:block text-2xl font-bold text-blue-600 cursor-pointer 
+        {/* <h1 className="hidden lg:block text-2xl font-bold text-blue-600 cursor-pointer 
         hover:scale-110 hover:text-blue-500 transition duration-300">
           MarketMind
-        </h1>
+        </h1> */}
+        <Link href="/" onClick={handleHomeClick}>
+  <h1 className="hidden lg:block text-2xl font-bold text-blue-600 cursor-pointer 
+  hover:scale-110 hover:text-blue-500 transition duration-300">
+    MarketMind
+  </h1>
+</Link>
 
         {/* 🔥 SEARCH (ORIGINAL STYLE + FIXED SIZE) */}
         <div className="group relative flex items-center px-4 py-2 rounded-xl 
@@ -230,7 +258,7 @@ border-b border-gray-200 dark:border-gray-800">
         </div>
 
         {/* 🔥 NAV LINKS (SAME LINE DESKTOP) */}
-        <div className="hidden lg:flex items-center gap-6 text-sm font-medium">
+        {/* <div className="hidden lg:flex items-center gap-6 text-sm font-medium">
           {["Home", "Dashboard", "Watchlist", "Markets"].map((item) => (
             <span
               key={item}
@@ -240,7 +268,20 @@ border-b border-gray-200 dark:border-gray-800">
               {item}
             </span>
           ))}
-        </div>
+        </div> */}
+        <div className="hidden lg:flex items-center gap-6 text-sm font-medium">
+  {navLinks.map((item) => (
+    <Link
+      key={item.name}
+      href={item.path}
+      onClick={item.name === "Home" ? handleHomeClick : undefined}
+      className="cursor-pointer text-gray-700 dark:text-gray-300 
+      hover:text-blue-500 dark:hover:text-blue-400 transition-all duration-300"
+    >
+      {item.name}
+    </Link>
+  ))}
+</div>
 
         {/* 🔥 RIGHT */}
         <div className="flex items-center gap-2 sm:gap-4">
@@ -282,7 +323,7 @@ border-b border-gray-200 dark:border-gray-800">
         bg-white dark:bg-[#020617] border-t border-gray-200 dark:border-gray-800 
         flex flex-col gap-4 text-sm font-medium lg:hidden">
 
-          {["Home", "Dashboard", "Watchlist", "Markets"].map((item) => (
+          {/* {["Home", "Dashboard", "Watchlist", "Markets"].map((item) => (
             <span
               key={item}
               className="cursor-pointer text-gray-700 dark:text-gray-300 
@@ -290,7 +331,21 @@ border-b border-gray-200 dark:border-gray-800">
             >
               {item}
             </span>
-          ))}
+          ))} */}
+
+          {navLinks.map((item) => (
+  <Link
+    key={item.name}
+    href={item.path}
+    onClick={() => {setMenuOpen(false);
+      if (item.name === "Home") handleHomeClick();
+}}
+    className="cursor-pointer text-gray-700 dark:text-gray-300 
+    hover:text-blue-500 dark:hover:text-blue-400 transition"
+  >
+    {item.name}
+  </Link>
+))}
 
           <button>Login</button>
           <button>Profile</button>
