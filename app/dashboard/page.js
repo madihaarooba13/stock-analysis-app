@@ -187,6 +187,8 @@ import Footer from "../../components/Footer";
 import MarketInfoCard from "../../components/MarketInfoCard";
 import BigChart from "../../components/BigChart";
 import { useRouter } from "next/navigation";
+import StockCard from "../../components/StockCard";
+// import StockCard from "../../components/StockCard";
 
 export default function Dashboard() {
   const [market, setMarket] = useState([]);
@@ -332,35 +334,26 @@ hover:scale-[1.01] transition-all duration-300">
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <h3 className="text-green-400 mb-3">Gainers</h3>
 
-            {gainers.map((s, i) => (
-              <div
-                key={i}
-                onMouseEnter={() => setFeatured(s)} // 🔥 magic
-                onClick={() => router.push(`/stock/${s.symbol}`)}
-                className="flex justify-between py-2 cursor-pointer 
-hover:text-green-300 hover:translate-x-1 transition-all duration-200"
-              >
-                <span>{s.symbol}</span>
-                <span>{s.change}%</span>
-              </div>
-            ))}
+           {gainers.map((s, i) => (
+  <StockCard
+    key={i}
+    stock={s}
+    onClick={() => router.push(`/stock/${s.symbol}`)}
+  />
+))}
           </div>
 
           {/* LOSERS */}
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <h3 className="text-red-400 mb-3">Losers</h3>
 
-            {losers.map((s, i) => (
-              <div
-                key={i}
-                onMouseEnter={() => setFeatured(s)} // 🔥 magic
-                onClick={() => router.push(`/stock/${s.symbol}`)}
-                className="flex justify-between py-2 cursor-pointer hover:text-red-300 transition"
-              >
-                <span>{s.symbol}</span>
-                <span>{s.change}%</span>
-              </div>
-            ))}
+          {losers.map((s, i) => (
+  <StockCard
+    key={i}
+    stock={s}
+    onClick={() => router.push(`/stock/${s.symbol}`)}
+  />
+))}
           </div>
 
         </div>

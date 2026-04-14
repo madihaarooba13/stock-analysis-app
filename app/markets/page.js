@@ -235,6 +235,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
+import StockCard from "../../components/StockCard";
 
 export default function MarketsPage() {
   const [market, setMarket] = useState([]);
@@ -360,43 +361,14 @@ bg-gradient-to-b from-[#020617] to-transparent">
 )}
 
 </div>
-            {stocks.map((stock, i) => {
-              const isSelected = selectedStock?.symbol === stock.symbol;
-
-              return (
-                <div
-                  key={i}
-                  onMouseEnter={() => setSelectedStock(stock)}
-                  onClick={() => router.push(`/stock/${stock.symbol}`)}
-                  className={`flex justify-between items-center p-3 rounded-lg 
-                  cursor-pointer border transition
-
-                  ${
-                    isSelected
-                      ? "bg-white/10 border-white/20"
-                      : "bg-transparent border-white/10 hover:bg-white/5"
-                  }`}
-                >
-                  <div>
-                    <p className="text-sm font-medium">{stock.symbol}</p>
-                    <p className="text-xs text-gray-400">Stock</p>
-                  </div>
-
-                  <div className="text-right">
-                    <p className="text-sm">₹ {stock.price}</p>
-                    <p
-                      className={`text-xs ${
-                        parseFloat(stock.change) >= 0
-                          ? "text-green-400"
-                          : "text-red-400"
-                      }`}
-                    >
-                      {stock.change}%
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+           {stocks.map((stock, i) => (
+  <StockCard
+    key={i}
+    stock={stock}
+    onClick={() => router.push(`/stock/${stock.symbol}`)}
+    onAdd={() => console.log("Add to watchlist", stock.symbol)}
+  />
+))}
            
 {/* BOTTOM SCROLL HINT */}
 <div className="sticky bottom-0 z-10 flex justify-center py-1 

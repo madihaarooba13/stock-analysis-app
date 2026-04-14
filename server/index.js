@@ -1,7 +1,15 @@
+
+
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors"); 
+const watchlistRoutes = require("./routes/watchlist");
+
 require("dotenv").config();
+
+// const watchlistRoutes = require("./routes/watchlist");
+// app.use("/api/watchlist", watchlistRoutes);
 
 const app = express();
 app.use(cors());
@@ -10,6 +18,7 @@ app.use(express.json());
 //import routes
 const stockRoutes = require("./routes/stock");
 app.use("/api/stocks", stockRoutes);
+app.use("/api/watchlist", watchlistRoutes);
 //test route
 app.get("/", (req, res) => {
   res.send("API running 🚀");

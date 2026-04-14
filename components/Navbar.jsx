@@ -149,6 +149,7 @@ import { useState, useEffect } from "react";
 import { Search, Bell, User, Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Navbar() {
   const [query, setQuery] = useState("");
@@ -347,7 +348,31 @@ border-b border-gray-200 dark:border-gray-800">
   </Link>
 ))}
 
-          <button>Login</button>
+          {/* <button>Login</button> */}
+          {!session ? (
+  <div className="flex gap-3">
+    <button
+      onClick={() => signIn("google")}
+      className="px-4 py-2 bg-white text-black rounded"
+    >
+      Google
+    </button>
+
+    <button
+      onClick={() => signIn("github")}
+      className="px-4 py-2 bg-gray-800 text-white rounded"
+    >
+      GitHub
+    </button>
+  </div>
+) : (
+  <button
+    onClick={() => signOut()}
+    className="px-4 py-2 border rounded"
+  >
+    Logout
+  </button>
+)}
           <button>Profile</button>
         </div>
       )}
