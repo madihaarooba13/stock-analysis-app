@@ -1,8 +1,9 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
-import mongoose from "mongoose";
-import User from "../../../../server/models/User.js";
+
+const connectDB = require("../../../../server/config/db");
+const User = require("../../../../server/models/User");
 
 const handler = NextAuth({
   providers: [
@@ -13,28 +14,35 @@ const handler = NextAuth({
     }),
 
     // 🔥 GITHUB
-    GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    }),
+   GitHubProvider({
+  clientId: process.env.GITHUB_ID,
+  clientSecret: process.env.GITHUB_SECRET,
+}),
   ],
 
   callbacks: {
     async signIn({ user }) {
-      await mongoose.connect(process.env.MONGO_URI);
+      try {
+        console.log("USER:", user);
 
-      // 🔥 check user exists
-      let existingUser = await User.findOne({ email: user.email });
+        await connectDB();
 
-      if (!existingUser) {
-        await User.create({
-          name: user.name,
-          email: user.email,
-          watchlist: [],
-        });
+        let existingUser = await User.findOne({ email: user.email });
+
+        if (!existingUser) {
+          await User.create({
+            name: user.name,
+            email: user.email,
+            watchlist: [],
+          });
+          console.log("NEW USER CREATED");
+        }
+
+        return true;
+      } catch (err) {
+        console.error("SIGNIN ERROR:", err);
+        return false;
       }
-
-      return true;
     },
   },
 

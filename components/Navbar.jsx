@@ -150,6 +150,7 @@ import { Search, Bell, User, Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
 export default function Navbar() {
   const [query, setQuery] = useState("");
@@ -157,6 +158,34 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
 
+  // import { signIn, signOut, useSession } from "next-auth/react";
+
+const { data: session } = useSession();
+
+// const handleLogin = async (provider) => {
+//   toast.loading("Logging in...");
+
+//   await signIn(provider, { callbackUrl: "/?login=success" });
+
+//   toast.dismiss();
+//   toast.success("Login successful 🎉");
+// };
+
+const handleLogin = async (provider) => {
+  await signIn(provider, { callbackUrl: "/?login=success" });
+};
+
+// const handleLogout = async () => {
+//   toast.loading("Logging out...");
+
+//   await signOut({ callbackUrl: "/" });
+
+//   toast.dismiss();
+//   toast.success("Logged out successfully 👋");
+// };
+const handleLogout = async () => {
+  await signOut({ callbackUrl: "/?logout=success" });
+};
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
@@ -300,10 +329,25 @@ border-b border-gray-200 dark:border-gray-800">
           </button>
 
           {/* hide on small */}
-          <button className="hidden sm:block px-2 sm:px-3 py-1.5 rounded-lg text-gray-700 dark:text-gray-300 
-          hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer text-sm">
-            Login
-          </button>
+         {!session ? (
+  <button
+    onClick={() => signIn(undefined, { callbackUrl: "/?login=success" })}
+    className="hidden sm:block px-2 sm:px-3 py-1.5 rounded-lg 
+    text-gray-700 dark:text-gray-300 
+    hover:bg-gray-200 dark:hover:bg-gray-700 transition text-sm"
+  >
+    Login
+  </button>
+) : (
+  <button
+    onClick={handleLogout}
+    className="hidden sm:block px-2 sm:px-3 py-1.5 rounded-lg 
+    text-gray-700 dark:text-gray-300 
+    hover:bg-gray-200 dark:hover:bg-gray-700 transition text-sm"
+  >
+    Logout
+  </button>
+)}
 
           <User className="hidden sm:block w-5 sm:w-6 h-5 sm:h-6 cursor-pointer text-gray-600 dark:text-gray-300 
           hover:text-blue-500 dark:hover:text-blue-400 transition" />
@@ -350,28 +394,34 @@ border-b border-gray-200 dark:border-gray-800">
 
           {/* <button>Login</button> */}
           {!session ? (
-  <div className="flex gap-3">
+  <div className="flex gap-2">
     <button
-      onClick={() => signIn("google")}
-      className="px-4 py-2 bg-white text-black rounded"
+      onClick={() => signIn(undefined, { callbackUrl: "/?login=success" })}
+      className="px-3 py-1.5 bg-white text-black rounded text-sm"
     >
       Google
     </button>
 
     <button
-      onClick={() => signIn("github")}
-      className="px-4 py-2 bg-gray-800 text-white rounded"
+      onClick={() => handleLogin("github")}
+      className="px-3 py-1.5 bg-gray-800 text-white rounded text-sm"
     >
       GitHub
     </button>
   </div>
 ) : (
   <button
-    onClick={() => signOut()}
-    className="px-4 py-2 border rounded"
+    onClick={handleLogout}
+    className="px-3 py-1.5 border border-white/20 rounded text-sm hover:bg-white/10"
   >
     Logout
   </button>
+)}
+
+{session && (
+  <span className="text-xs text-gray-400">
+    {session.user.email}
+  </span>
 )}
           <button>Profile</button>
         </div>

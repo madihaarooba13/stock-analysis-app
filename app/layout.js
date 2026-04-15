@@ -38,7 +38,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
-
+import { Toaster } from "react-hot-toast";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -68,9 +68,20 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+    
     <html lang="en">
       <body>
         <Providers>
+          <Toaster
+  position="top-center"
+  toastOptions={{
+    style: {
+      background: "#020617",
+      color: "#fff",
+      border: "1px solid rgba(255,255,255,0.1)",
+    },
+  }}
+/>
           {children}
         </Providers>
       </body>

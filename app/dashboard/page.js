@@ -215,6 +215,19 @@ export default function Dashboard() {
       });
   }, []);
 
+  useEffect(() => {
+  if (!stocks.length) return;
+
+  let index = 0;
+
+  const interval = setInterval(() => {
+    index = (index + 1) % stocks.length;
+    setFeatured(stocks[index]);
+  }, 5000); // 5 seconds
+
+  return () => clearInterval(interval);
+}, [stocks]);
+
   // 🔥 FEATURED CHART (FIXED)
   useEffect(() => {
     if (!featured) return;

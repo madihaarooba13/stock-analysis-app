@@ -363,11 +363,12 @@ bg-gradient-to-b from-[#020617] to-transparent">
 </div>
            {stocks.map((stock, i) => (
   <StockCard
-    key={i}
-    stock={stock}
-    onClick={() => router.push(`/stock/${stock.symbol}`)}
-    onAdd={() => console.log("Add to watchlist", stock.symbol)}
-  />
+  key={i}
+  stock={stock}
+  onClick={() => router.push(`/stock/${stock.symbol}`)}
+  onAdd={() => console.log("Add to watchlist", stock.symbol)}
+  onHover={() => setSelectedStock(stock)}
+/>
 ))}
            
 {/* BOTTOM SCROLL HINT */}

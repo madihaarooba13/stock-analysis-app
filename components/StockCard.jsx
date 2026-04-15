@@ -1,15 +1,16 @@
 "use client";
 
-export default function StockCard({ stock, onClick, onAdd, onRemove }) {
+export default function StockCard({ stock, onClick, onAdd, onRemove, onHover }) {
   const isUp = parseFloat(stock.change) >= 0;
 
   return (
-    <div
-      onClick={onClick}
-      className="flex justify-between items-center p-4 rounded-xl 
-      bg-white/5 border border-white/10 cursor-pointer
-      hover:bg-white/10 hover:scale-[1.02] transition-all duration-300"
-    >
+   <div
+  onClick={onClick}
+  onMouseEnter={onHover}
+  className="flex justify-between items-center p-4 rounded-xl 
+  bg-white/5 border border-white/10 cursor-pointer
+  hover:bg-white/10 hover:scale-[1.02] transition-all duration-300"
+>
       {/* LEFT */}
       <div>
         <p className="font-medium">{stock.symbol}</p>

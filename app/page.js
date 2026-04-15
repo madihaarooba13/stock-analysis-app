@@ -135,8 +135,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
 import Navbar from "../components/Navbar";
-import { useRouter } from "next/navigation";
+import { useRouter , useSearchParams  } from "next/navigation";
 import Sparkline from "../components/Sparkline";
 import MarketCard from "../components/MarketCard";
 import MarketGraph from "../components/MarketGraph";
@@ -159,6 +160,22 @@ export default function Home() {
 
 const router = useRouter();
 const [market, setMarket] = useState([]);
+const searchParams = useSearchParams();
+
+useEffect(() => {
+  const login = searchParams.get("login");
+  const logout = searchParams.get("logout");
+
+  if (login === "success") {
+    toast.success("Login successful 🎉");
+    router.replace("/");
+  }
+
+  if (logout === "success") {
+    toast.success("Logged out successfully 👋");
+    router.replace("/");
+  }
+}, [searchParams]);
 
 useEffect(() => {
   const fetchMarket = async () => {
