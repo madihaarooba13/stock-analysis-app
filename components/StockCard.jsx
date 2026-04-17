@@ -1,7 +1,8 @@
 "use client";
 
 export default function StockCard({ stock, onClick, onAdd, onRemove, onHover }) {
-  const isUp = parseFloat(stock.change) >= 0;
+  const changeValue = stock?.change ?? 0;
+const isUp = parseFloat(changeValue) >= 0;
 
   return (
    <div
@@ -13,17 +14,17 @@ export default function StockCard({ stock, onClick, onAdd, onRemove, onHover }) 
 >
       {/* LEFT */}
       <div>
-        <p className="font-medium">{stock.symbol}</p>
+        <p className="font-medium">{stock?.symbol ?? "N/A"}</p>
         <p className="text-xs text-gray-400">Stock</p>
       </div>
 
       {/* RIGHT */}
       <div className="text-right flex items-center gap-4">
         <div>
-          <p>₹ {stock.price}</p>
-          <p className={`text-sm ${isUp ? "text-green-400" : "text-red-400"}`}>
-            {stock.change}%
-          </p>
+         <p>₹ {stock?.price ?? "--"}</p>
+<p className={`text-sm ${isUp ? "text-green-400" : "text-red-400"}`}>
+  {changeValue}%
+</p>
         </div>
 
         {/* ACTION BUTTONS */}

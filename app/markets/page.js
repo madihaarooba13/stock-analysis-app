@@ -236,6 +236,8 @@ import Footer from "../../components/Footer";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import StockCard from "../../components/StockCard";
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
 export default function MarketsPage() {
   const [market, setMarket] = useState([]);
@@ -245,12 +247,38 @@ export default function MarketsPage() {
   const [showTop, setShowTop] = useState(false);
 const [showBottom, setShowBottom] = useState(true);
   const listRef = useRef(null);
+  
 
   const router = useRouter();
+  const { data: session } = useSession();
+const userId = session?.user?.email;
   const scrollUp = () => {
   listRef.current?.scrollBy({ top: -200, behavior: "smooth" });
 };
 
+const addToWatchlist = async (stock) => {
+  if (!userId) {
+    toast.error("Login first");
+    return;
+  }
+
+  await fetch("http://localhost:5000/api/watchlist/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+  userId,
+  stock: {
+    symbol: stock.symbol,
+    price: stock.price,
+    change: stock.change,
+  },
+})
+  });
+
+  toast.success("Added to watchlist ⭐");
+};
 const scrollDown = () => {
   listRef.current?.scrollBy({ top: 200, behavior: "smooth" });
 };
@@ -366,7 +394,7 @@ bg-gradient-to-b from-[#020617] to-transparent">
   key={i}
   stock={stock}
   onClick={() => router.push(`/stock/${stock.symbol}`)}
-  onAdd={() => console.log("Add to watchlist", stock.symbol)}
+  onAdd={() => addToWatchlist(stock)}
   onHover={() => setSelectedStock(stock)}
 />
 ))}
