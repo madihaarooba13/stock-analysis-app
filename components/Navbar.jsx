@@ -157,6 +157,7 @@ export default function Navbar() {
   const [dark, setDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
+  const [profileOpen, setProfileOpen] = useState(false);
 
   // import { signIn, signOut, useSession } from "next-auth/react";
 
@@ -183,6 +184,25 @@ const handleLogin = async (provider) => {
 //   toast.dismiss();
 //   toast.success("Logged out successfully 👋");
 // };
+
+const getColorFromEmail = (email) => {
+  const colors = [
+    "bg-red-500",
+    "bg-green-500",
+    "bg-blue-500",
+    "bg-yellow-500",
+    "bg-purple-500",
+    "bg-pink-500",
+    "bg-indigo-500",
+  ];
+
+  let hash = 0;
+  for (let i = 0; i < email.length; i++) {
+    hash = email.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  return colors[Math.abs(hash) % colors.length];
+};
 const handleLogout = async () => {
   await signOut({ callbackUrl: "/?logout=success" });
 };
@@ -316,8 +336,13 @@ border-b border-gray-200 dark:border-gray-800">
         {/* 🔥 RIGHT */}
         <div className="flex items-center gap-2 sm:gap-4">
 
-          <Bell className="w-5 h-5 cursor-pointer text-gray-600 dark:text-gray-300 
-          hover:text-blue-500 dark:hover:text-blue-400 transition" />
+          {/* <Bell className="w-5 h-5 cursor-pointer text-gray-600 dark:text-gray-300 
+          hover:text-blue-500 dark:hover:text-blue-400 transition" /> */}
+          <Bell
+  onClick={() => toast("No notifications yet 🔔")}
+  className="w-5 h-5 cursor-pointer text-gray-600 dark:text-gray-300 
+  hover:text-blue-500 dark:hover:text-blue-400 transition"
+/>
 
           <button
             onClick={toggleTheme}
@@ -349,8 +374,50 @@ border-b border-gray-200 dark:border-gray-800">
   </button>
 )}
 
-          <User className="hidden sm:block w-5 sm:w-6 h-5 sm:h-6 cursor-pointer text-gray-600 dark:text-gray-300 
-          hover:text-blue-500 dark:hover:text-blue-400 transition" />
+          {/* <User className="hidden sm:block w-5 sm:w-6 h-5 sm:h-6 cursor-pointer text-gray-600 dark:text-gray-300 
+          hover:text-blue-500 dark:hover:text-blue-400 transition" /> */}
+
+          <div className="relative hidden sm:block">
+ <div className="relative hidden sm:block">
+  {session ? (
+    <div
+      onClick={() => setProfileOpen(!profileOpen)}
+      className={`w-9 h-9 flex items-center justify-center rounded-full 
+      text-white font-semibold cursor-pointer 
+      ${getColorFromEmail(session.user.email)}`}
+    >
+      {session.user.email[0].toUpperCase()}
+    </div>
+  ) : (
+    <User className="w-6 h-6 cursor-pointer" />
+  )}
+
+  {profileOpen && (
+    <div className="absolute right-0 mt-3 w-56 rounded-xl 
+    bg-[#020617] border border-white/10 shadow-lg p-4 z-50">
+
+      <p className="text-sm text-gray-400 mb-2">Signed in as</p>
+      <p className="text-white text-sm break-words mb-3">
+        {session?.user?.email}
+      </p>
+
+      <button
+        onClick={() => router.push("/profile")}
+        className="w-full text-left text-sm px-3 py-2 rounded-lg hover:bg-white/10"
+      >
+        Profile
+      </button>
+
+      <button
+        onClick={handleLogout}
+        className="w-full text-left text-sm px-3 py-2 rounded-lg text-red-400 hover:bg-white/10 mt-2"
+      >
+        Logout
+      </button>
+    </div>
+  )}
+</div>
+</div>
 
           {/* hamburger */}
           <button

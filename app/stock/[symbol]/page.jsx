@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import Navbar from "../../../components/Navbar";
 import StockChart from "../../../components/StockChart";
 import useSWR from "swr";
+import Footer from "../../../components/Footer";
 
 export default function StockPage() {
   const params = useParams();
@@ -20,6 +21,28 @@ export default function StockPage() {
   const [range, setRange] = useState("1M");
   const numericChange = Number(change) || 0;
 const isPositive = numericChange >= 0;
+const getMarketStatus = () => {
+  const now = new Date();
+
+  const istTime = new Date(
+    now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+  );
+
+  const day = istTime.getDay(); // 0 = Sunday, 6 = Saturday
+
+  // ❌ Weekend check
+  if (day === 0 || day === 6) return false;
+
+  const hours = istTime.getHours();
+  const minutes = istTime.getMinutes();
+
+  const current = hours * 60 + minutes;
+
+  const open = 9 * 60 + 15;
+  const close = 15 * 60 + 30;
+
+  return current >= open && current <= close;
+};
 
 
   // 🔥 STOCK FETCH
@@ -82,11 +105,21 @@ const isPositive = numericChange >= 0;
         {/* HEADER */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold">{symbol}</h1>
-          <p className="text-sm text-gray-400 mt-1">
+          {/* <p className="text-sm text-gray-400 mt-1">
   Apple Inc. • NASDAQ • Technology
+</p> */}
+<p className="text-sm text-gray-400 mt-1">
+  {stats?.name || symbol} • {stats?.exchange || "Market"} • {stats?.sector || "Stock"}
 </p>
-<p className="text-xs mt-2 text-green-400">
+{/* <p className="text-xs mt-2 text-green-400">
   ● Market Open
+</p> */}
+<p
+  className={`text-xs mt-2 ${
+    getMarketStatus() ? "text-green-400" : "text-red-400"
+  }`}
+>
+  ● {getMarketStatus() ? "Market Open" : "Market Closed"}
 </p>
 
           {/* <div className="flex items-center gap-4 mt-2">
@@ -244,6 +277,8 @@ const isPositive = numericChange >= 0;
 
         </div>
       </div>
+       <Footer />
     </div>
+   
   );
 }
