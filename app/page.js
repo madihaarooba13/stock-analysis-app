@@ -133,6 +133,7 @@
 
 
 "use client";
+export const dynamic = "force-dynamic";
 
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
@@ -163,6 +164,8 @@ export default function Home() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    if (!searchParams) return;
+
     const login = searchParams.get("login");
     const logout = searchParams.get("logout");
 
