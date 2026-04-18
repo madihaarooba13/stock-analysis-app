@@ -37,7 +37,7 @@ export default function MarketDetail() {
     const fetchMarket = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/api/stocks/index/market"
+          "https://marketmindbackend.onrender.com/api/stocks/index/market"
         );
         const data = await res.json();
 
@@ -57,7 +57,7 @@ export default function MarketDetail() {
 
       try {
         const res = await fetch(
-          `http://localhost:5000/api/stocks/chart/${symbol}?range=${range}`
+          `https://marketmindbackend.onrender.com/api/stocks/chart/${symbol}?range=${range}`
         );
 
         const data = await res.json();

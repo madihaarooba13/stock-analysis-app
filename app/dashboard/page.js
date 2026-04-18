@@ -213,14 +213,14 @@ const getMarketStatus = () => {
 };
   // 🔥 MARKET
   useEffect(() => {
-    fetch("http://localhost:5000/api/stocks/index/market")
+    fetch("https://marketmindbackend.onrender.com/api/stocks/index/market")
       .then((res) => res.json())
       .then(setMarket);
   }, []);
 
   // 🔥 STOCKS
   useEffect(() => {
-    fetch("http://localhost:5000/api/stocks/multi/demo")
+    fetch("https://marketmindbackend.onrender.com/api/stocks/multi/demo")
       .then((res) => res.json())
       .then((data) => {
         setStocks(data);
@@ -245,7 +245,7 @@ const getMarketStatus = () => {
   useEffect(() => {
     if (!featured) return;
 
-    fetch(`http://localhost:5000/api/stocks/chart/${featured.symbol}`)
+    fetch(`https://marketmindbackend.onrender.com/api/stocks/chart/${featured.symbol}`)
       .then((res) => res.json())
       .then(setChartData);
   }, [featured]);

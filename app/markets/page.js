@@ -262,7 +262,7 @@ export default function MarketsPage() {
       return;
     }
 
-    await fetch("http://localhost:5000/api/watchlist/add", {
+    await fetch("https://marketmindbackend.onrender.com/api/watchlist/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -305,14 +305,14 @@ export default function MarketsPage() {
 
   // MARKET FETCH
   useEffect(() => {
-    fetch("http://localhost:5000/api/stocks/index/market")
+    fetch("https://marketmindbackend.onrender.com/api/stocks/index/market")
       .then((res) => res.json())
       .then(setMarket);
   }, []);
 
   // STOCKS FETCH
   useEffect(() => {
-    fetch("http://localhost:5000/api/stocks/multi/demo")
+    fetch("https://marketmindbackend.onrender.com/api/stocks/multi/demo")
       .then((res) => res.json())
       .then((data) => {
         setStocks(data);
@@ -324,7 +324,7 @@ export default function MarketsPage() {
   useEffect(() => {
     if (!selectedStock) return;
 
-    fetch(`http://localhost:5000/api/stocks/chart/${selectedStock.symbol}`)
+    fetch(`https://marketmindbackend.onrender.com/api/stocks/chart/${selectedStock.symbol}`)
       .then((res) => res.json())
       .then(setChartData);
   }, [selectedStock]);

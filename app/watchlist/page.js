@@ -113,13 +113,13 @@ export default function WatchlistPage() {
   useEffect(() => {
     if (!userId) return;
 
-    fetch(`http://localhost:5000/api/watchlist/${userId}`)
+    fetch(`https://marketmindbackend.onrender.com/api/watchlist/${userId}`)
       .then(res => res.json())
       .then(data => setStocks(data.stocks || []));
   }, [userId]);
 
   const removeStock = async (symbol) => {
-    await fetch("http://localhost:5000/api/watchlist/remove", {
+    await fetch("https://marketmindbackend.onrender.com/api/watchlist/remove", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -130,7 +130,7 @@ export default function WatchlistPage() {
       }),
     });
 
-    const res = await fetch(`http://localhost:5000/api/watchlist/${userId}`);
+    const res = await fetch(`https://marketmindbackend.onrender.com/api/watchlist/${userId}`);
     const data = await res.json();
     setStocks(data.stocks || []);
   };

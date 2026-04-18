@@ -49,7 +49,7 @@ export default function StockPage() {
   const fetchStock = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/stocks/${symbol}`
+        `https://marketmindbackend.onrender.com/api/stocks/${symbol}`
       );
       const data = await res.json();
 
@@ -72,7 +72,7 @@ export default function StockPage() {
   const fetcher = (url) => fetch(url).then(res => res.json());
 
   const { data: chartData, isLoading } = useSWR(
-    `http://localhost:5000/api/stocks/chart/${symbol}?range=${range}`,
+    `https://marketmindbackend.onrender.com/api/stocks/chart/${symbol}?range=${range}`,
     fetcher,
     {
       revalidateOnFocus: false,

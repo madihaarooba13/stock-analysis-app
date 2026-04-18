@@ -179,7 +179,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchMarket = async () => {
-      const res = await fetch("http://localhost:5000/api/stocks/index/market");
+      const res = await fetch("https://marketmindbackend.onrender.com/api/stocks/index/market");
       const data = await res.json();
       setMarket(data);
     };
@@ -224,7 +224,7 @@ export default function Home() {
   // 🔥 MULTIPLE STOCKS
   const fetchMultipleStocks = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/stocks/multi/demo");
+      const res = await fetch("https://marketmindbackend.onrender.com/api/stocks/multi/demo");
       const data = await res.json();
       setStocks(data);
     } catch (err) {
@@ -237,7 +237,7 @@ export default function Home() {
       setChartLoading(true);
 
       const res = await fetch(
-        `http://localhost:5000/api/stocks/chart/${symbol}`
+        `https://marketmindbackend.onrender.com/api/stocks/chart/${symbol}`
       );
       const data = await res.json();
 
