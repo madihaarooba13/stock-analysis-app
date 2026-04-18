@@ -49,9 +49,18 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// export const metadata = {
+//   title: "MarketMind",
+//   description: "Stock Analysis Platform",
+// };
 export const metadata = {
   title: "MarketMind",
   description: "Stock Analysis Platform",
+  icons: {
+    icon: "/logo.jpeg",
+    shortcut: "/logo.jpeg",
+    apple: "/logo.jpeg",
+  },
 };
 
 // export default function RootLayout({ children }) {
