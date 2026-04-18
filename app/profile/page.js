@@ -55,7 +55,7 @@ export default function ProfilePage() {
 
     const res = await fetch("/api/user/update", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: session.user.email,
         name,
@@ -96,7 +96,7 @@ export default function ProfilePage() {
 
           {/* GENDER */}
           <Dropdown label="Gender" value={gender} setValue={setGender} disabled={!isEditing}
-            options={["male","female","other"]} />
+            options={["male", "female", "other"]} />
 
           {/* DOB */}
           <Input label="DOB *" type="date" value={dob} setValue={setDob} disabled={!isEditing} />
@@ -106,7 +106,7 @@ export default function ProfilePage() {
             value={location}
             setValue={setLocation}
             disabled={!isEditing}
-            options={["India 🇮🇳","USA 🇺🇸","UK 🇬🇧","Canada 🇨🇦","Australia 🇦🇺"]}
+            options={["India 🇮🇳", "USA 🇺🇸", "UK 🇬🇧", "Canada 🇨🇦", "Australia 🇦🇺"]}
           />
 
           {/* MOBILE */}
@@ -117,7 +117,7 @@ export default function ProfilePage() {
             <label className="text-sm text-gray-400">Bio</label>
             <textarea
               value={bio}
-              onChange={(e)=>setBio(e.target.value)}
+              onChange={(e) => setBio(e.target.value)}
               placeholder="Tell something about yourself..."
               disabled={!isEditing}
               className="w-full mt-1 px-3 py-2 rounded-xl bg-white/5 border border-white/10 outline-none focus:border-blue-500"
@@ -126,10 +126,10 @@ export default function ProfilePage() {
 
           {/* PREF */}
           <Dropdown label="Market" value={market} setValue={setMarket} disabled={!isEditing}
-            options={["NSE","US"]} />
+            options={["NSE", "US"]} />
 
           <Dropdown label="Currency" value={currency} setValue={setCurrency} disabled={!isEditing}
-            options={["INR","USD"]} />
+            options={["INR", "USD"]} />
 
           {/* BUTTON */}
           <div className="mt-6">
@@ -140,13 +140,13 @@ export default function ProfilePage() {
                   Save
                 </button>
 
-                <button onClick={()=>setIsEditing(false)}
+                <button onClick={() => setIsEditing(false)}
                   className="flex-1 border border-white/20 py-2 rounded-xl">
                   Cancel
                 </button>
               </div>
             ) : (
-              <button onClick={()=>setIsEditing(true)}
+              <button onClick={() => setIsEditing(true)}
                 className="w-full bg-white/10 py-2 rounded-xl">
                 Edit Profile
               </button>
@@ -161,14 +161,14 @@ export default function ProfilePage() {
 }
 
 /* INPUT */
-function Input({ label, value, setValue, disabled, type="text" }) {
+function Input({ label, value, setValue, disabled, type = "text" }) {
   return (
     <div className="mt-3">
       <label className="text-sm text-gray-400">{label}</label>
       <input
         type={type}
         value={value}
-        onChange={(e)=>setValue(e.target.value)}
+        onChange={(e) => setValue(e.target.value)}
         disabled={disabled}
         className="w-full mt-1 px-3 py-2 rounded-xl bg-white/5 border border-white/10 outline-none focus:border-blue-500"
       />

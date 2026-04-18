@@ -144,17 +144,17 @@ function StockChart({ data }) {
         vertLines: { color: "#1f2937" },
         horzLines: { color: "#1f2937" },
       },
-     crosshair: {
-  mode: 1,
-  vertLine: {
-    color: "#444",
-    width: 1,
-  },
-  horzLine: {
-    color: "#444",
-    width: 1,
-  },
-},
+      crosshair: {
+        mode: 1,
+        vertLine: {
+          color: "#444",
+          width: 1,
+        },
+        horzLine: {
+          color: "#444",
+          width: 1,
+        },
+      },
       rightPriceScale: {
         borderColor: "#374151",
       },
@@ -164,19 +164,19 @@ function StockChart({ data }) {
     });
 
     // 🔥 LINE SERIES (UPDATED API)
-  const lineSeries = chart.addLineSeries({
-  color: "#22c55e",
-  lineWidth: 3,
-  priceLineVisible: true,
-  lastValueVisible: true,
-});
+    const lineSeries = chart.addLineSeries({
+      color: "#22c55e",
+      lineWidth: 3,
+      priceLineVisible: true,
+      lastValueVisible: true,
+    });
 
-// 🔥 ADD THIS JUST BELOW
-lineSeries.applyOptions({
-  lineColor: "#22c55e",
-  topColor: "rgba(34,197,94,0.4)",
-  bottomColor: "rgba(34,197,94,0.05)",
-});
+    // 🔥 ADD THIS JUST BELOW
+    lineSeries.applyOptions({
+      lineColor: "#22c55e",
+      topColor: "rgba(34,197,94,0.4)",
+      bottomColor: "rgba(34,197,94,0.05)",
+    });
 
     chartRef.current = chart;
     seriesRef.current = lineSeries;

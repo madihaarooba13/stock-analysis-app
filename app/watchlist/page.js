@@ -63,7 +63,7 @@
 //   return (
 //     <>
 //       <Navbar />
-      
+
 
 //       <div className="min-h-screen bg-[#020617] text-white px-6 py-24 max-w-5xl mx-auto">
 
@@ -139,7 +139,7 @@ export default function WatchlistPage() {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-[#020617] text-white px-6 py-24 max-w-5xl mx-auto">
+      <div className="min-h-screen bg-[#020617] text-white px-6 py-24 max-w-5xl mx-auto mt-7">
 
         <h2 className="text-2xl font-semibold mb-6">Your Watchlist</h2>
 

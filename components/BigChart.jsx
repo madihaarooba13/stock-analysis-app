@@ -114,23 +114,23 @@ export default function BigChart({ data }) {
     });
 
     const isUp =
-  data[data.length - 1]?.value >= data[0]?.value;
+      data[data.length - 1]?.value >= data[0]?.value;
     // ✅ CLEAN LINE SERIES (NO WRONG OPTIONS)
     const lineSeries = chart.addAreaSeries({
-  lineColor: isUp ? "#4ade80" : "#ef4444",
+      lineColor: isUp ? "#4ade80" : "#ef4444",
 
-  topColor: isUp
-    ? "rgba(74,222,128,0.4)"
-    : "rgba(239,68,68,0.35)",
+      topColor: isUp
+        ? "rgba(74,222,128,0.4)"
+        : "rgba(239,68,68,0.35)",
 
-  bottomColor: isUp
-    ? "rgba(74,222,128,0.02)"
-    : "rgba(239,68,68,0.02)",
+      bottomColor: isUp
+        ? "rgba(74,222,128,0.02)"
+        : "rgba(239,68,68,0.02)",
 
-  lineWidth: 3,
-  priceLineVisible: true,
-  lastValueVisible: true,
-});
+      lineWidth: 3,
+      priceLineVisible: true,
+      lastValueVisible: true,
+    });
 
     // ✅ PRICE LINE STYLE (THIS IS YOUR “aisi line” 🔥)
     lineSeries.applyOptions({
@@ -143,20 +143,20 @@ export default function BigChart({ data }) {
 
     const lastPoint = data[data.length - 1];
 
-if (lastPoint) {
-  lineSeries.setMarkers([
-    {
-      time: lastPoint.time,
-      position: "inBar",
-      color: isUp ? "#4ade80" : "#ef4444",
-      shape: "circle",
-      size: 1,
-    },
-  ]);
-}
+    if (lastPoint) {
+      lineSeries.setMarkers([
+        {
+          time: lastPoint.time,
+          position: "inBar",
+          color: isUp ? "#4ade80" : "#ef4444",
+          shape: "circle",
+          size: 1,
+        },
+      ]);
+    }
     setTimeout(() => {
-  chart.timeScale().fitContent();
-}, 100);
+      chart.timeScale().fitContent();
+    }, 100);
 
 
 

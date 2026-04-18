@@ -197,7 +197,20 @@ export default function Dashboard() {
   const [chartData, setChartData] = useState([]);
 
   const router = useRouter();
+const getMarketStatus = () => {
+  const now = new Date();
 
+  const ist = new Date(
+    now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+  );
+
+  const day = ist.getDay();
+  if (day === 0 || day === 6) return false;
+
+  const minutes = ist.getHours() * 60 + ist.getMinutes();
+
+  return minutes >= 555 && minutes <= 930; // 9:15–3:30
+};
   // 🔥 MARKET
   useEffect(() => {
     fetch("http://localhost:5000/api/stocks/index/market")
@@ -216,17 +229,17 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-  if (!stocks.length) return;
+    if (!stocks.length) return;
 
-  let index = 0;
+    let index = 0;
 
-  const interval = setInterval(() => {
-    index = (index + 1) % stocks.length;
-    setFeatured(stocks[index]);
-  }, 5000); // 5 seconds
+    const interval = setInterval(() => {
+      index = (index + 1) % stocks.length;
+      setFeatured(stocks[index]);
+    }, 5000); // 5 seconds
 
-  return () => clearInterval(interval);
-}, [stocks]);
+    return () => clearInterval(interval);
+  }, [stocks]);
 
   // 🔥 FEATURED CHART (FIXED)
   useEffect(() => {
@@ -252,7 +265,8 @@ export default function Dashboard() {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-[#020617] text-white px-6 py-24 max-w-6xl mx-auto">
+      {/* <div className="min-h-screen bg-[#020617] text-white px-6 py-24 max-w-6xl mx-auto "> */}
+      <div className="min-h-screen bg-[#020617] text-white px-3 sm:px-6 py-24 mt-7 sm:mt-0 max-w-6xl mx-auto sm:py-32">
 
         {/* MARKET SNAPSHOT */}
         <h2 className="text-2xl font-semibold mb-6">Market Snapshot</h2>
@@ -260,7 +274,7 @@ export default function Dashboard() {
         <div className="grid md:grid-cols-3 gap-6">
           {market.map((item, i) => (
             <MarketInfoCard
-            className="hover:scale-[1.02] transition-all duration-300"
+              className="hover:scale-[1.02] transition-all duration-300"
               key={i}
               title={item.name}
               data={item}
@@ -292,7 +306,17 @@ export default function Dashboard() {
 
           <div className="bg-white/5 p-4 rounded-xl border border-white/10 hover:scale-[1.02] transition">
             <p className="text-gray-400 text-sm">Market Status</p>
-            <p className="text-sm text-green-400">Live</p>
+            <div className="flex items-center gap-2">
+  <span className={`w-2 h-2 rounded-full animate-pulse ${
+    getMarketStatus() ? "bg-green-400" : "bg-red-400"
+  }`} />
+
+  <span className={`text-sm ${
+    getMarketStatus() ? "text-green-400" : "text-red-400"
+  }`}>
+    {getMarketStatus() ? "Market Open" : "Market Closed"}
+  </span>
+</div>
           </div>
 
         </div>
@@ -313,14 +337,13 @@ hover:scale-[1.01] transition-all duration-300">
                 ₹ {featured.price}
               </p>
               <p
-  className={`text-sm ${
-    parseFloat(featured?.change) >= 0
-      ? "text-green-400"
-      : "text-red-400"
-  }`}
->
-  {featured?.change}%
-</p>
+                className={`text-sm ${parseFloat(featured?.change) >= 0
+                  ? "text-green-400"
+                  : "text-red-400"
+                  }`}
+              >
+                {featured?.change}%
+              </p>
 
               <div className="h-[300px]">
                 <BigChart data={chartData} />
@@ -347,26 +370,26 @@ hover:scale-[1.01] transition-all duration-300">
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <h3 className="text-green-400 mb-3">Gainers</h3>
 
-           {gainers.map((s, i) => (
-  <StockCard
-    key={i}
-    stock={s}
-    onClick={() => router.push(`/stock/${s.symbol}`)}
-  />
-))}
+            {gainers.map((s, i) => (
+              <StockCard
+                key={i}
+                stock={s}
+                onClick={() => router.push(`/stock/${s.symbol}`)}
+              />
+            ))}
           </div>
 
           {/* LOSERS */}
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <h3 className="text-red-400 mb-3">Losers</h3>
 
-          {losers.map((s, i) => (
-  <StockCard
-    key={i}
-    stock={s}
-    onClick={() => router.push(`/stock/${s.symbol}`)}
-  />
-))}
+            {losers.map((s, i) => (
+              <StockCard
+                key={i}
+                stock={s}
+                onClick={() => router.push(`/stock/${s.symbol}`)}
+              />
+            ))}
           </div>
 
         </div>

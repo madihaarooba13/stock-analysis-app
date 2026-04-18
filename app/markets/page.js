@@ -93,7 +93,7 @@
 //         <div className="grid md:grid-cols-2 gap-6 mt-16">
 
 //           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 
-// backdrop-blur-xl sticky top-24 h-fit">
+// backdrop-blur-xl mt-4 md:mt-0 md:sticky md:top-24 h-fit">
 //             <h3 className="text-green-400 font-semibold mb-4">Top Gainers</h3>
 
 //             {gainers.map((stock, i) => (
@@ -110,7 +110,7 @@
 //           </div>
 
 //           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 
-// backdrop-blur-xl sticky top-24 h-fit">
+// backdrop-blur-xl mt-4 md:mt-0 md:sticky md:top-24 h-fit">
 //             <h3 className="text-red-400 font-semibold mb-4">Top Losers</h3>
 
 //             {losers.map((stock, i) => (
@@ -131,7 +131,7 @@
 //         {/* 🔥 ALL STOCKS (VERTICAL + PREVIEW) */}
 //         <h2 className="text-2xl font-semibold mt-16 mb-6">All Stocks</h2>
 
-//         <div className="grid md:grid-cols-2 gap-8">
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
 
 //           {/* LEFT LIST */}
 //           <div className="space-y-3">
@@ -167,7 +167,7 @@
 
 //           {/* RIGHT PREVIEW */}
 //           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 
-// backdrop-blur-xl sticky top-24 h-fit">
+// backdrop-blur-xl mt-4 md:mt-0 md:sticky md:top-24 h-fit">
 
 //             {selectedStock && (
 //               <>
@@ -245,63 +245,63 @@ export default function MarketsPage() {
   const [selectedStock, setSelectedStock] = useState(null);
   const [chartData, setChartData] = useState([]);
   const [showTop, setShowTop] = useState(false);
-const [showBottom, setShowBottom] = useState(true);
+  const [showBottom, setShowBottom] = useState(true);
   const listRef = useRef(null);
-  
+
 
   const router = useRouter();
   const { data: session } = useSession();
-const userId = session?.user?.email;
+  const userId = session?.user?.email;
   const scrollUp = () => {
-  listRef.current?.scrollBy({ top: -200, behavior: "smooth" });
-};
-
-const addToWatchlist = async (stock) => {
-  if (!userId) {
-    toast.error("Login first");
-    return;
-  }
-
-  await fetch("http://localhost:5000/api/watchlist/add", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-  userId,
-  stock: {
-    symbol: stock.symbol,
-    price: stock.price,
-    change: stock.change,
-  },
-})
-  });
-
-  toast.success("Added to watchlist ⭐");
-};
-const scrollDown = () => {
-  listRef.current?.scrollBy({ top: 200, behavior: "smooth" });
-};
-
-useEffect(() => {
-  const el = listRef.current;
-
-  const handleScroll = () => {
-    if (!el) return;
-
-    const { scrollTop, scrollHeight, clientHeight } = el;
-
-    setShowTop(scrollTop > 10);
-    setShowBottom(scrollTop + clientHeight < scrollHeight - 10);
+    listRef.current?.scrollBy({ top: -200, behavior: "smooth" });
   };
 
-  if (el) {
-    el.addEventListener("scroll", handleScroll);
-    handleScroll();
-  }
+  const addToWatchlist = async (stock) => {
+    if (!userId) {
+      toast.error("Login first");
+      return;
+    }
 
-  return () => el?.removeEventListener("scroll", handleScroll);
-}, []);
+    await fetch("http://localhost:5000/api/watchlist/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+        stock: {
+          symbol: stock.symbol,
+          price: stock.price,
+          change: stock.change,
+        },
+      })
+    });
+
+    toast.success("Added to watchlist ⭐");
+  };
+  const scrollDown = () => {
+    listRef.current?.scrollBy({ top: 200, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const el = listRef.current;
+
+    const handleScroll = () => {
+      if (!el) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = el;
+
+      setShowTop(scrollTop > 10);
+      setShowBottom(scrollTop + clientHeight < scrollHeight - 10);
+    };
+
+    if (el) {
+      el.addEventListener("scroll", handleScroll);
+      handleScroll();
+    }
+
+    return () => el?.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // MARKET FETCH
   useEffect(() => {
@@ -333,7 +333,7 @@ useEffect(() => {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-[#020617] text-white px-6 py-24 max-w-6xl mx-auto">
+      <div className="min-h-screen bg-[#020617] text-white px-6 py-24 max-w-6xl mx-auto mt-11">
 
         {/* MARKET OVERVIEW */}
         <h2 className="text-2xl font-semibold mb-6">Market Overview</h2>
@@ -356,148 +356,147 @@ useEffect(() => {
         {/* ALL STOCKS */}
         <h2 className="text-2xl font-semibold mt-16 mb-6">All Stocks</h2>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
 
           {/* LEFT LIST */}
           <div className="relative group border border-white/10 rounded-xl p-5 bg-white/5 
 backdrop-blur-md transition-all duration-300 
 hover:border-white/20 hover:shadow-lg hover:shadow-black/20 
-sticky top-24 h-fit">
-    <div
-    ref={listRef}
-    className="max-h-[550px] overflow-y-auto space-y-2 pr-2 scrollbar-hide"
-  >
-{/* TOP SCROLL HINT */}
-<div className="sticky top-0 z-10 flex justify-center py-1 
+mt-4 md:mt-0 md:sticky md:top-24 h-fit">
+            <div
+              ref={listRef}
+              className="max-h-[550px] overflow-y-auto space-y-2 pr-2 scrollbar-hide"
+            >
+              {/* TOP SCROLL HINT */}
+              <div className="sticky top-0 z-10 flex justify-center py-1 
 bg-gradient-to-b from-[#020617] to-transparent">
 
-  {showTop && (
-  <div className="sticky top-0 z-10 flex justify-center pt-2 pb-1 
+                {showTop && (
+                  <div className="sticky top-0 z-10 flex justify-center pt-2 pb-1 
   bg-gradient-to-b from-[#020617] to-transparent 
   opacity-0 group-hover:opacity-100 transition">
 
-    <button
-      onClick={scrollUp}
-      className="bg-white/10 hover:bg-white/20 
+                    <button
+                      onClick={scrollUp}
+                      className="bg-white/10 hover:bg-white/20 
       text-white text-lg px-6 py-1 rounded-full 
       backdrop-blur-md transition"
-    >
-      ⌃
-    </button>
+                    >
+                      ⌃
+                    </button>
 
-  </div>
-)}
+                  </div>
+                )}
 
-</div>
-           {stocks.map((stock, i) => (
-  <StockCard
-  key={i}
-  stock={stock}
-  onClick={() => router.push(`/stock/${stock.symbol}`)}
-  onAdd={() => addToWatchlist(stock)}
-  onHover={() => setSelectedStock(stock)}
-/>
-))}
-           
-{/* BOTTOM SCROLL HINT */}
-<div className="sticky bottom-0 z-10 flex justify-center py-1 
+              </div>
+              {stocks.map((stock, i) => (
+                <StockCard
+                  key={i}
+                  stock={stock}
+                  onClick={() => router.push(`/stock/${stock.symbol}`)}
+                  onAdd={() => addToWatchlist(stock)}
+                  onHover={() => setSelectedStock(stock)}
+                />
+              ))}
+
+              {/* BOTTOM SCROLL HINT */}
+              <div className="sticky bottom-0 z-10 flex justify-center py-1 
 bg-gradient-to-t from-[#020617] to-transparent">
 
- {showBottom && (
-  <div className="sticky bottom-0 z-10 flex justify-center pt-1 pb-2 
+                {showBottom && (
+                  <div className="sticky bottom-0 z-10 flex justify-center pt-1 pb-2 
   bg-gradient-to-t from-[#020617] to-transparent 
   opacity-0 group-hover:opacity-100 transition">
 
-    <button
-      onClick={scrollDown}
-      className="bg-white/10 hover:bg-white/20 
+                    <button
+                      onClick={scrollDown}
+                      className="bg-white/10 hover:bg-white/20 
       text-white text-lg px-6 py-1 rounded-full 
       backdrop-blur-md transition"
-    >
-      ⌄
-    </button>
+                    >
+                      ⌄
+                    </button>
 
-  </div>
-)}
+                  </div>
+                )}
 
-</div>
+              </div>
 
-          </div>
-          {/* TOP FADE */}
-<div className="pointer-events-none absolute top-0 left-0 w-full h-8 
+            </div>
+            {/* TOP FADE */}
+            <div className="pointer-events-none absolute top-0 left-0 w-full h-8 
 bg-gradient-to-b from-[#020617] to-transparent" />
 
-{/* BOTTOM FADE */}
-<div className="pointer-events-none absolute bottom-0 left-0 w-full h-10 
+            {/* BOTTOM FADE */}
+            <div className="pointer-events-none absolute bottom-0 left-0 w-full h-10 
 bg-gradient-to-t from-[#020617] to-transparent" />
-            </div>
+          </div>
 
           {/* RIGHT PREVIEW */}
-         <div className="border border-white/10 rounded-xl p-5 bg-white/5 
+          <div className="hidden md:block border border-white/10 rounded-xl p-5 bg-white/5 
 backdrop-blur-md transition-all duration-300 
 hover:border-white/20 hover:shadow-lg hover:shadow-black/20 
-sticky top-24 h-fit">
+md:mt-0 md:sticky md:top-24 h-fit">
 
-  {selectedStock && (
-    <>
-      {/* HEADER */}
-      <div className="mb-3">
-        <h3 className="text-lg font-medium">
-          {selectedStock.symbol}
-        </h3>
+            {selectedStock && (
+              <>
+                {/* HEADER */}
+                <div className="mb-3">
+                  <h3 className="text-lg font-medium">
+                    {selectedStock.symbol}
+                  </h3>
 
-        <p className="text-lg">
-          ₹ {selectedStock.price}
-        </p>
+                  <p className="text-lg">
+                    ₹ {selectedStock.price}
+                  </p>
 
-        <p
-          className={`text-sm ${
-            parseFloat(selectedStock.change) >= 0
-              ? "text-green-400"
-              : "text-red-400"
-          }`}
-        >
-          {selectedStock.change}%
-        </p>
-      </div>
+                  <p
+                    className={`text-sm ${parseFloat(selectedStock.change) >= 0
+                      ? "text-green-400"
+                      : "text-red-400"
+                      }`}
+                  >
+                    {selectedStock.change}%
+                  </p>
+                </div>
 
-      {/* CHART */}
-      <div className="h-[260px] rounded-lg overflow-hidden">
-        <BigChart data={chartData} />
-      </div>
+                {/* CHART */}
+                <div className="h-[260px] rounded-lg overflow-hidden">
+                  <BigChart data={chartData} />
+                </div>
 
-      {/* EXTRA INFO */}
-      <div className="mt-4 grid grid-cols-3 text-sm text-gray-400">
-        <div>
-          <p className="text-xs">Open</p>
-          <p className="text-white">₹ {selectedStock.price}</p>
-        </div>
+                {/* EXTRA INFO */}
+                <div className="mt-4 grid grid-cols-3 text-sm text-gray-400">
+                  <div>
+                    <p className="text-xs">Open</p>
+                    <p className="text-white">₹ {selectedStock.price}</p>
+                  </div>
 
-        <div>
-          <p className="text-xs">High</p>
-          <p className="text-white">₹ {selectedStock.price}</p>
-        </div>
+                  <div>
+                    <p className="text-xs">High</p>
+                    <p className="text-white">₹ {selectedStock.price}</p>
+                  </div>
 
-        <div>
-          <p className="text-xs">Low</p>
-          <p className="text-white">₹ {selectedStock.price}</p>
-        </div>
-      </div>
+                  <div>
+                    <p className="text-xs">Low</p>
+                    <p className="text-white">₹ {selectedStock.price}</p>
+                  </div>
+                </div>
 
-      {/* BUTTON */}
-      <button
-        onClick={() =>
-          router.push(`/stock/${selectedStock.symbol}`)
-        }
-        className="mt-5 w-full border border-white/20 rounded-md py-2 text-sm 
+                {/* BUTTON */}
+                <button
+                  onClick={() =>
+                    router.push(`/stock/${selectedStock.symbol}`)
+                  }
+                  className="mt-5 w-full border border-white/20 rounded-md py-2 text-sm 
         hover:bg-white/10 transition"
-      >
-        View Details
-      </button>
-    </>
-  )}
+                >
+                  View Details
+                </button>
+              </>
+            )}
 
-</div>
+          </div>
 
         </div>
 
