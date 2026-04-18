@@ -155,31 +155,50 @@ export default function Home() {
   // const [symbol, setSymbol] = useState("");
   const [stocks, setStocks] = useState([]);
   // const [chartData, setChartData] = useState([]);
-  // const [chartLoading, setChartLoading] = useState(false);
+  const [chartLoading, setChartLoading] = useState(false);
   // const [searched, setSearched] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const router = useRouter();
   const [market, setMarket] = useState([]);
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
+
+  // useEffect(() => {
+  //   if (!searchParams) return;
+
+  //   const login = searchParams.get("login");
+  //   const logout = searchParams.get("logout");
+
+  //   if (login === "success") {
+  //     toast.success("Login successful 🎉");
+  //     router.replace("/");
+  //   }
+
+  //   if (logout === "success") {
+  //     toast.success("Logged out successfully 👋");
+  //     router.replace("/");
+  //   }
+  // }, [searchParams]);
+
 
   useEffect(() => {
-    if (!searchParams) return;
+  if (typeof window === "undefined") return;
 
-    const login = searchParams.get("login");
-    const logout = searchParams.get("logout");
+  const params = new URLSearchParams(window.location.search);
 
-    if (login === "success") {
-      toast.success("Login successful 🎉");
-      router.replace("/");
-    }
+  const login = params.get("login");
+  const logout = params.get("logout");
 
-    if (logout === "success") {
-      toast.success("Logged out successfully 👋");
-      router.replace("/");
-    }
-  }, [searchParams]);
+  if (login === "success") {
+    toast.success("Login successful 🎉");
+    router.replace("/");
+  }
 
+  if (logout === "success") {
+    toast.success("Logged out successfully 👋");
+    router.replace("/");
+  }
+}, []);
   useEffect(() => {
     const fetchMarket = async () => {
       const res = await fetch("https://marketmindbackend.onrender.com/api/stocks/index/market");
